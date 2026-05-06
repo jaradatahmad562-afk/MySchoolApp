@@ -1,0 +1,59 @@
+/* --- الألوان الثلاثة المعتمدة للمشروع كامل --- */
+
+/* 1. التدرج الكحلي (للكروت الأساسية والإحصائيات العامة) */
+.bg-primary-grad {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%) !important;
+    color: white !important;
+}
+
+/* 2. التدرج الأخضر (للكروت النشطة والنجاح) */
+.bg-success-grad {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+}
+
+/* 3. الحالة (Status) - ألوان واضحة ومريحة للعين */
+.status-active {
+    background: #10b981 !important; /* نفس الأخضر المعتمد */
+    color: white !important;
+    font-weight: bold;
+    border-radius: 50px !important;
+    padding: 5px 15px !important;
+}
+
+.status-inactive {
+    background: #9ca3af !important; /* رمادي حيادي للحالة غير النشطة */
+    color: white !important;
+    font-weight: bold;
+    border-radius: 50px !important;
+    padding: 5px 15px !important;
+}
+
+/* زر الإضافة - الأخضر الموحد */
+.btn-save-custom {
+    background: #10b981 !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-save-custom:hover {
+    background: #059669 !important; /* درجة أغمق شوي عند الحوسبة */
+    transform: translateY(-2px);
+}
+
+/* تأثير الزجاج - خلفية بيضاء شفافة بلمسة رمادي فاتح */
+.glass-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* ظل خفيف جداً */
+}
+
+/* لون اسم الطالب/المعلم في الجدول (كحلي) */
+.entity-name {
+    color: #1e3a8a !important;
+    font-weight: bold;
+}

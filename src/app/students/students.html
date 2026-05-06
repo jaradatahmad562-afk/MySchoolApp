@@ -1,0 +1,107 @@
+<div class="container-fluid p-4 min-vh-100" style="background-color: #f3f4f6;">
+  <h2 class="fw-bold mb-4" style="color: #1e3a8a;">Student Management</h2>
+
+  <div class="row g-4 mb-5">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-primary-grad">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="fw-bold opacity-75 text-white">Total Students</h6>
+            <h2 class="display-5 fw-bold text-white">{{ totalStudents }}</h2>
+          </div>
+          <i class="bi bi-people opacity-25 text-white" style="font-size: 3.5rem;"></i>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-success-grad">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="fw-bold opacity-75 text-white">Active Students</h6>
+            <h2 class="display-5 fw-bold text-white">{{ activeStudentsCount }}</h2>
+          </div>
+          <i class="bi bi-person-check opacity-25 text-white" style="font-size: 3.5rem;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm p-4 mb-4 rounded-4 glass-card bg-white">
+    <h5 class="mb-3 text-secondary fw-bold">Add New Student</h5>
+    <div class="row g-3 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label small fw-bold text-muted">Student Name</label>
+        <input #newName type="text" class="form-control border-0 bg-light" placeholder="e.g. Ahmad Al-Zoubi">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small fw-bold text-muted">Birth Date</label>
+        <input #newDate type="date" class="form-control border-0 bg-light">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small fw-bold text-muted">Classroom</label>
+        <select #newClass class="form-select border-0 bg-light">
+          <option value="" disabled selected>Select Classroom</option>
+          <option *ngFor="let cls of classrooms" [value]="cls.id">{{ cls.name }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button (click)="addStudent(newName.value, newDate.value, newClass.value); newName.value=''; newDate.value=''; newClass.value=''" 
+                class="btn btn-save-custom w-100 py-2">
+          <i class="bi bi-plus-circle me-1"></i> Add
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <div class="input-group shadow-sm rounded-3 overflow-hidden">
+      <span class="input-group-text bg-white border-0">
+        <i class="bi bi-search text-muted"></i>
+      </span>
+      <input #searchInput type="text" class="form-control border-0 ps-0" 
+             placeholder="Search by student name..." 
+             (input)="searchStudents(searchInput.value)">
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light">
+          <tr class="text-muted small fw-bold">
+            <th class="ps-4 py-3">ID</th> 
+            <th>STUDENT NAME</th>
+            <th>BIRTH DATE</th>
+            <th class="text-center">STATUS</th>
+            <th class="text-center px-4">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of filteredStudents">
+            <td class="ps-4 text-muted small">#{{ student.id }}</td> 
+            <td class="entity-name">{{ student.name }}</td>
+            <td class="text-secondary">{{ student.birthDate | date:'mediumDate' }}</td> 
+            <td class="text-center">
+              <button (click)="toggleStatus(student)" 
+                    class="btn btn-sm border-0 fw-bold px-3 py-2" 
+                    [ngClass]="(student.status?.toLowerCase() === 'active') ? 'status-active' : 'status-inactive'"
+                    style="font-size: 0.7rem;">
+                <i class="bi me-1" [ngClass]="(student.status?.toLowerCase() === 'active') ? 'bi-check-circle-fill' : 'bi-dash-circle-fill'"></i>
+                {{ student.status | uppercase }}
+              </button>
+            </td>
+            <td class="text-center px-4">
+              <button class="btn btn-link text-danger p-0" (click)="deleteStudent(student.id)">
+                <i class="bi bi-trash3 fs-5"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredStudents.length === 0">
+            <td colspan="5" class="text-center py-5 text-muted">No students found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

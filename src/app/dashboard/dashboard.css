@@ -1,0 +1,87 @@
+.dashboard-hero {
+  /* صورة فخمة وهادئة لمكتبة عصرية */
+  background-image: url('https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=2073&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 92vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+.main-overlay {
+  /* تدرج لوني كحلي غامق شفاف يبرز الصورة والنص معاً */
+  background: linear-gradient(135deg, rgba(28, 40, 51, 0.8), rgba(0, 0, 0, 0.6));
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.hero-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.hero-header h1 {
+  color: #ffffff;
+  font-size: 3.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+}
+
+.hero-header p {
+  color: #d1d5db;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.quick-access-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.action-card {
+  background: rgba(255, 255, 255, 0.08); /* تأثير زجاجي خفيف */
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 35px 25px;
+  border-radius: 24px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.action-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-12px);
+  border-color: #3498db;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.icon-box {
+  font-size: 3.2rem;
+  margin-bottom: 15px;
+}
+
+.action-card h3 {
+  font-size: 1.3rem;
+  color: #3498db;
+  margin-bottom: 8px;
+}
+
+.action-card p {
+  font-size: 0.85rem;
+  color: #bdc3c7;
+  line-height: 1.4;
+}

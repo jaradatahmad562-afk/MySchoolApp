@@ -1,0 +1,79 @@
+<div class="container-fluid p-4 min-vh-100" style="background-color: #f3f4f6;">
+  
+  <div class="row g-4 mb-5">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-primary-grad">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="fw-bold opacity-75 text-white">Total Teachers</h6>
+            <h2 class="display-5 fw-bold text-white">{{ teachers.length }}</h2>
+          </div>
+          <i class="bi bi-people-fill opacity-25 text-white" style="font-size: 3.5rem;"></i>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-success-grad">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="fw-bold opacity-75 text-white">Active Teachers</h6>
+            <h2 class="display-5 fw-bold text-white">{{ getActiveCount() }}</h2>
+          </div>
+          <i class="bi bi-person-check-fill opacity-25 text-white" style="font-size: 3.5rem;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm p-4 mb-5 rounded-4 glass-card">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label fw-bold text-muted small">Teacher Name</label>
+        <input type="text" [(ngModel)]="currentTeacher.name" class="form-control border-0 bg-light">
+      </div>
+      <div class="col-md-5">
+        <label class="form-label fw-bold text-muted small">Specialization</label>
+        <input type="text" [(ngModel)]="currentTeacher.specialization" class="form-control border-0 bg-light">
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-save-custom w-100 py-2" (click)="saveTeacher()">
+          <i class="bi bi-plus-circle me-1"></i> Add
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive shadow-sm rounded-4 overflow-hidden bg-white">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="bg-light">
+        <tr class="text-muted small fw-bold">
+          <th class="px-4 py-3">ID</th>
+          <th>FULL NAME</th>
+          <th>SPECIALIZATION</th>
+          <th class="text-center">STATUS</th>
+          <th class="text-center">ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let teacher of teachers">
+          <td class="px-4 text-muted small">#{{ teacher.id }}</td>
+          <td class="entity-name">{{ teacher.name }}</td>
+          <td><span class="badge bg-light text-dark border-0 px-3 py-2">{{ teacher.specialization }}</span></td>
+          <td class="text-center">
+            <button (click)="toggleStatus(teacher)" 
+                    [ngClass]="teacher.isActive ? 'status-active' : 'status-inactive'"
+                    class="btn btn-sm border-0">
+              {{ teacher.isActive ? 'ACTIVE' : 'INACTIVE' }}
+            </button>
+          </td>
+          <td class="text-center">
+            <button class="btn btn-link text-danger p-0" (click)="deleteTeacher(teacher.id)">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
