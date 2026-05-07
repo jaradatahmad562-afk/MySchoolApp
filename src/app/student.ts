@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class StudentService {
-  // تأكد إن الرابط هون هو الرابط الصحيح للـ API عندك
   private apiUrl = 'https://localhost:7264/api/Student'; 
 
   constructor(private http: HttpClient) { }
@@ -23,7 +22,6 @@ export class StudentService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  // ضيف هاي الميثود بالظبط عشان يروح الخط الأحمر
   updateStudent(id: number, student: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, student);
   }

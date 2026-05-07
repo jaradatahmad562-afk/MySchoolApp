@@ -16,7 +16,6 @@ export class StudentsComponent implements OnInit {
   filteredStudents: any[] = [];
   classrooms: any[] = [];
   
-  // Notification Management
   notificationMessage: string = '';
   showNotification: boolean = false;
   notificationType: 'success' | 'error' | 'warning' = 'success';
@@ -29,8 +28,6 @@ export class StudentsComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-  // --- الإحصائيات (Getters) ---
-  // هدول بتناديهم بالـ HTML باستخدام {{ totalStudents }} و {{ activeStudentsCount }}
   get totalStudents(): number {
     return this.students.length;
   }
@@ -38,7 +35,6 @@ export class StudentsComponent implements OnInit {
   get activeStudentsCount(): number {
     return this.students.filter(s => s.status === 'Active').length;
   }
-  // ---------------------------
 
   ngOnInit(): void {
     this.loadStudents();

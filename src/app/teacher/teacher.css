@@ -1,20 +1,16 @@
-/* --- الألوان الثلاثة المعتمدة للمشروع كامل --- */
 
-/* 1. التدرج الكحلي (للكروت الأساسية والإحصائيات العامة) */
 .bg-primary-grad {
     background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%) !important;
     color: white !important;
 }
 
-/* 2. التدرج الأخضر (للكروت النشطة والنجاح) */
 .bg-success-grad {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     color: white !important;
 }
 
-/* 3. الحالة (Status) - ألوان واضحة ومريحة للعين */
 .status-active {
-    background: #10b981 !important; /* نفس الأخضر المعتمد */
+    background: #10b981 !important; 
     color: white !important;
     font-weight: bold;
     border-radius: 50px !important;
@@ -22,7 +18,7 @@
 }
 
 .status-inactive {
-    background: #9ca3af !important; /* رمادي حيادي للحالة غير النشطة */
+    background: #9ca3af !important; 
     color: white !important;
     font-weight: bold;
     border-radius: 50px !important;

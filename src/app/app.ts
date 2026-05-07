@@ -10,5 +10,4 @@ import { RouterModule } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
-  // الكلاس صار فاضي لأننا نقلنا كل المنطق لـ StudentsComponent
 }
