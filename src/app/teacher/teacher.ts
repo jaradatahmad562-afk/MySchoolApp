@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 
 @Injectable({ providedIn: 'root' })
 export class TeacherService {
-  private apiUrl = 'https://localhost:7264/api/teachers'; 
+  private apiUrl = 'https://localhost:7264/api/Teacher'; 
 
   constructor(private http: HttpClient) { }
 
@@ -57,23 +57,18 @@ export class TeacherComponent implements OnInit {
   }
 
   toggleStatus(teacher: any): void {
-  // 1. Store original status in case of server error
   const originalStatus = teacher.isActive;
   
-  // 2. Toggle the boolean value
   const newStatus = !teacher.isActive;
   teacher.isActive = newStatus;
 
-  // 3. Update the server
   this.teacherService.updateTeacher(teacher.id, teacher).subscribe({
     next: () => {
-      // If you have a notification method like displayNotification, use it here:
       console.log(`Status changed to ${newStatus ? 'Active' : 'Inactive'}`);
       this.cdr.detectChanges();
     },
     error: (err) => {
       console.error('Update status failed:', err);
-      // Rollback to original status on error
       teacher.isActive = originalStatus;
       this.cdr.detectChanges();
       alert('Failed to update status on server');
@@ -113,7 +108,6 @@ export class TeacherComponent implements OnInit {
   }
 
   deleteTeacher(id: number) {
-  // شلنا جملة الـ if والـ confirm نهائياً
   this.teacherService.deleteTeacher(id).subscribe({
     next: () => {
       this.loadTeachers();
@@ -132,7 +126,6 @@ export class TeacherComponent implements OnInit {
     return this.teachers.filter(t => t.isActive).length;
   }
   deleteItem(id: any) {
-  // هذا الكود بيمسح المدرس من القائمة اللي قدامك
   this.teachers = this.teachers.filter(teacher => teacher.id !== id);
 }
 }

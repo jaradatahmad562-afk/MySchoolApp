@@ -1,7 +1,30 @@
-<nav style="background: #2c3e50; padding: 15px; display: flex; gap: 20px;">
-  <a routerLink="/dashboard" style="color: white; text-decoration: none;">Dashboard</a>
-  <a routerLink="/students" style="color: white; text-decoration: none;">Students List</a>
+<nav class="main-navbar">
+  <div class="nav-brand">
+    <i class="bi bi-mortarboard-fill"></i> School System
+  </div>
+  
+  <div class="nav-links">
+    <a routerLink="/dashboard" routerLinkActive="active-link">
+      <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+    <a routerLink="/students" routerLinkActive="active-link">
+      <i class="bi bi-people"></i> Students
+    </a>
+    <a routerLink="/teachers" routerLinkActive="active-link">
+      <i class="bi bi-person-badge"></i> Teachers
+    </a>
+    <a routerLink="/classrooms" routerLinkActive="active-link">
+      <i class="bi bi-door-open"></i> Classrooms
+    </a>
+    <a routerLink="/subjects" routerLinkActive="active-link">
+      <i class="bi bi-book"></i> Subjects
+    </a>
+    <a routerLink="/schedule" routerLinkActive="active-link">
+      <i class="bi bi-calendar3"></i> Schedule
+    </a>
+  </div>
 </nav>
 
-<!-- هون رح تظهر الصفحات لما نضغط على اللينكات فوق -->
-<router-outlet></router-outlet>
+<div class="page-content">
+  <router-outlet></router-outlet>
+</div>

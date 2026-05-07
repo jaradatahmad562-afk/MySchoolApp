@@ -1,0 +1,102 @@
+<div class="container-fluid p-4" style="background-color: #f8f9fa; min-vh-100;">
+  <div class="d-flex align-items-center mb-4">
+    <button class="btn btn-outline-secondary btn-sm me-3 rounded-circle shadow-sm" routerLink="/dashboard">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <h3 class="fw-bold m-0" style="color: #1e3a8a;">Class Schedule Management</h3>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4 mb-4">
+    <div class="card-header bg-white py-3 border-bottom">
+      <h5 class="mb-0 text-primary fw-bold"><i class="bi bi-calendar-plus me-2"></i>Assign New Slot</h5>
+    </div>
+    <div class="card-body p-4">
+      <form (ngSubmit)="addSchedule()" #scheduleForm="ngForm" class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label small fw-bold text-secondary">Day of Week</label>
+          <select class="form-select bg-light border-0" [(ngModel)]="newSchedule.day" name="day" required>
+            <option [value]="0">Sunday</option>
+            <option [value]="1">Monday</option>
+            <option [value]="2">Tuesday</option>
+            <option [value]="3">Wednesday</option>
+            <option [value]="4">Thursday</option>
+            <option [value]="5">Friday</option>
+            <option [value]="6">Saturday</option>
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label small fw-bold text-secondary">Start Time</label>
+          <input type="time" class="form-control bg-light border-0" [(ngModel)]="newSchedule.startTime" name="startTime" required>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label small fw-bold text-secondary">End Time</label>
+          <input type="time" class="form-control bg-light border-0" [(ngModel)]="newSchedule.endTime" name="endTime" required>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label small fw-bold text-secondary">Subject</label>
+          <select class="form-select bg-light border-0" [(ngModel)]="newSchedule.subjectId" name="subjectId" required>
+            <option [value]="0" disabled selected>Select Subject</option>
+            <option *ngFor="let sub of subjects" [value]="sub.id">{{sub.title}}</option>
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label small fw-bold text-secondary">Classroom</label>
+          <select class="form-select bg-light border-0" [(ngModel)]="newSchedule.classroomId" name="classroomId" required>
+            <option [value]="0" disabled selected>Select Room</option>
+            <option *ngFor="let room of classrooms" [value]="room.id">{{room.name}}</option>
+          </select>
+        </div>
+
+        <div class="col-md-1 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100 shadow-sm fw-bold" [disabled]="!scheduleForm.form.valid">
+            Add
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+     <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light text-secondary small fw-bold text-center">
+          <tr>
+            <th class="ps-4 py-3 text-start">DAY</th>
+            <th>TIME SLOT</th>
+            <th>SUBJECT</th>
+            <th>CLASSROOM</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let item of schedules">
+            <td class="ps-4 fw-bold text-primary text-start">{{ getDayName(item.day) }}</td>
+            <td>
+              <span class="badge rounded-pill bg-info-subtle text-info-emphasis px-3 py-2">
+                {{ item.time }}
+              </span>
+            </td>
+            <td class="fw-medium text-dark">{{ item.subjectName }}</td>
+            <td>
+              <span class="text-muted">
+                <i class="bi bi-geo-alt me-1"></i> {{ item.roomName }}
+              </span>
+            </td>
+            <td>
+              <button 
+                type="button"
+                class="btn btn-sm btn-outline-danger border-0" 
+                (click)="deleteSchedule(item.id)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
