@@ -1,18 +1,14 @@
-/* --- الألوان الثلاثة الموحدة لمشروع أحمد --- */
 
-/* 1. التدرج الكحلي (للكروت الأساسية) */
 .bg-primary-grad {
     background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%) !important;
     color: white !important;
 }
 
-/* 2. التدرج الأخضر (للصفوف المتاحة) */
 .bg-success-grad {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     color: white !important;
 }
 
-/* 3. زر الإضافة الأخضر */
 .btn-save-custom {
     background-color: #10b981 !important;
     color: white !important;
@@ -26,9 +22,8 @@
     transform: translateY(-2px);
 }
 
-/* 4. حالات الغرف الصفية (Status) */
 .status-active {
-    background-color: #10b981 !important; /* أخضر للـ Available */
+    background-color: #10b981 !important; 
     color: white !important;
     border-radius: 50px !important;
     padding: 6px 14px !important;
@@ -36,20 +31,18 @@
 }
 
 .status-inactive {
-    background-color: #9ca3af !important; /* رمادي للـ Occupied */
+    background-color: #9ca3af !important; 
     color: white !important;
     border-radius: 50px !important;
     padding: 6px 14px !important;
     font-weight: bold;
 }
 
-/* 5. تنسيق اسم الغرفة بالجدول */
 .entity-name {
     color: #1e3a8a !important;
     font-weight: bold;
 }
 
-/* 6. تحسين شكل المدخلات (Inputs) */
 .form-control:focus, .form-select:focus {
     border-color: #1e3a8a !important;
     box-shadow: 0 0 0 0.25rem rgba(30, 58, 138, 0.1) !important;

@@ -6,12 +6,12 @@
     <h3 class="fw-bold m-0" style="color: #1e3a8a;">Class Schedule Management</h3>
   </div>
 
-  <div class="card shadow-sm border-0 rounded-4 mb-4">
+  <div class="card shadow-sm border-0 rounded-4 mb-4" *ngIf="isAdmin()">
     <div class="card-header bg-white py-3 border-bottom">
       <h5 class="mb-0 text-primary fw-bold"><i class="bi bi-calendar-plus me-2"></i>Assign New Slot</h5>
     </div>
     <div class="card-body p-4">
-      <form (ngSubmit)="addSchedule()" #scheduleForm="ngForm" class="row g-3">
+      <form (ngSubmit)="scheduleForm.form.valid && addSchedule()" #scheduleForm="ngForm" class="row g-3" novalidate>
         <div class="col-md-3">
           <label class="form-label small fw-bold text-secondary">Day of Week</label>
           <select class="form-select bg-light border-0" [(ngModel)]="newSchedule.day" name="day" required>
@@ -61,7 +61,7 @@
   </div>
 
   <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-     <div class="table-responsive">
+    <div class="table-responsive">
       <table class="table table-hover align-middle mb-0">
         <thead class="bg-light text-secondary small fw-bold text-center">
           <tr>
@@ -69,7 +69,7 @@
             <th>TIME SLOT</th>
             <th>SUBJECT</th>
             <th>CLASSROOM</th>
-            <th>ACTION</th>
+            <th *ngIf="isAdmin()">ACTION</th>
           </tr>
         </thead>
         <tbody class="text-center">
@@ -86,7 +86,7 @@
                 <i class="bi bi-geo-alt me-1"></i> {{ item.roomName }}
               </span>
             </td>
-            <td>
+            <td *ngIf="isAdmin()">
               <button 
                 type="button"
                 class="btn btn-sm btn-outline-danger border-0" 

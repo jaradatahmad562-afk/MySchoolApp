@@ -5,21 +5,28 @@ import { ClassroomComponent } from './classroom/classroom';
 import { TeacherComponent } from './teacher/teacher'; 
 import { ScheduleComponent } from './schedule/schedule';
 import { SubjectComponent } from './subject/subject'; 
+import { LoginComponent } from './login/login';
+import { GradesComponent } from './grades/grades'; 
+import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
-  { path: 'dashboard', component: DashboardComponent },
+
+  { path: 'login', component: LoginComponent },
+
+  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   
-  { path: 'students', component: StudentsComponent },
+  { path: 'students', component: StudentsComponent, canActivate: [authGuard] },
   
-  { path: 'classrooms', component: ClassroomComponent }, 
+  { path: 'classrooms', component: ClassroomComponent, canActivate: [authGuard] }, 
   
-  { path: 'teachers', component: TeacherComponent }, 
+  { path: 'teachers', component: TeacherComponent, canActivate: [authGuard] }, 
   
-  { path: 'schedule', component: ScheduleComponent },
+  { path: 'grades', component: GradesComponent, canActivate: [authGuard] }, 
+
+  { path: 'schedule', component: ScheduleComponent, canActivate: [authGuard] },
   
-  { path: 'subjects', component: SubjectComponent }, 
+  { path: 'subjects', component: SubjectComponent, canActivate: [authGuard] }, 
   
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  
-  { path: '**', redirectTo: '/dashboard' }
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
 ];

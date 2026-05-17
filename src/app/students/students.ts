@@ -1,13 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // 👈 ضفنا HttpHeaders عشان التوكن
 import { StudentService } from '../student'; 
 
 @Component({
   selector: 'app-students',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule], 
+  imports: [CommonModule, FormsModule], 
   templateUrl: './students.html',
   styleUrl: './students.css'
 })
@@ -28,12 +28,32 @@ export class StudentsComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
+  // 🛡️ ميثود جلب التوكن وحقنه بالـ Headers لحماية طلب الـ Classroom مباشرة
+  private getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    };
+  }
+
+  // 👑 دالة فحص الصلاحية عشان الـ HTML يخفي ويظهر الأزرار حسب الأدمن والمعلم
+  isAdmin(): boolean {
+    const role = localStorage.getItem('role');
+    return role === 'Admin';
+  }
+
   get totalStudents(): number {
     return this.students.length;
   }
 
   get activeStudentsCount(): number {
-    return this.students.filter(s => s.status === 'Active').length;
+    // 🚀 تأمين الحسبة في حال كانت الـ status راجعة كابيتال أو سمول من السيرفر
+    return this.students.filter(s => {
+      const currentStatus = s.status || s.Status || '';
+      return currentStatus.toString().toLowerCase() === 'active';
+    }).length;
   }
 
   ngOnInit(): void {
@@ -55,8 +75,8 @@ export class StudentsComponent implements OnInit {
   loadStudents(): void {
     this.studentService.getStudents().subscribe({
       next: (data) => {
-        this.students = data; 
-        this.filteredStudents = data;
+        this.students = data || []; 
+        this.filteredStudents = [...this.students];
         this.cdr.detectChanges(); 
       },   
       error: (err) => {
@@ -67,9 +87,11 @@ export class StudentsComponent implements OnInit {
   }
 
   loadClassrooms(): void {
-    this.http.get<any[]>(this.classroomApiUrl).subscribe({
+    // 🚀 حقنا التوكن هان بطلب الـ Classroom عشان السيرفر يرضى يرجع الصفوف وما يطلع الـ Dropdown فاضي
+    this.http.get<any[]>(this.classroomApiUrl, this.getAuthHeaders()).subscribe({
       next: (data) => {
-        this.classrooms = data;
+        console.log('Classrooms loaded from server:', data); // طبعة بالـ Console للتأكد من الأسماء
+        this.classrooms = data || [];
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error loading classrooms:', err)
@@ -80,27 +102,34 @@ export class StudentsComponent implements OnInit {
     if (!searchTerm) {
       this.filteredStudents = this.students;
     } else {
-      this.filteredStudents = this.students.filter(student => 
-        student.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      this.filteredStudents = this.students.filter(student => {
+        const studentName = student.name || student.Name || '';
+        return studentName.toLowerCase().includes(searchTerm.toLowerCase());
+      });
     }
     this.cdr.detectChanges();
   }
 
   toggleStatus(student: any): void {
-    const originalStatus = student.status;
-    const newStatus = student.status === 'Active' ? 'Inactive' : 'Active';
+    if (!student) return;
 
+    // 🚀 تأمين وحماية الـ Status تماماً من مشاكل الـ undefined والـ Case Sensitivity
+    const currentStatus = student.status || student.Status || 'Active';
+    const newStatus = currentStatus.toString().toLowerCase() === 'active' ? 'Inactive' : 'Active';
+
+    // بنحدث القيمة بالصيغتين عشان نضمن الفرونت والباك إند يقرأوها صح
     student.status = newStatus;
+    student.Status = newStatus;
 
-    this.studentService.updateStudent(student.id, student).subscribe({
+    this.studentService.updateStudent(student.id || student.Id, student).subscribe({
       next: () => {
         this.displayNotification(`Status changed to ${newStatus}`, 'success');
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Update status failed:', err);
-        student.status = originalStatus; 
+        student.status = currentStatus; 
+        student.Status = currentStatus; 
         this.displayNotification('Failed to update status on server', 'error');
         this.cdr.detectChanges();
       }
@@ -136,8 +165,8 @@ export class StudentsComponent implements OnInit {
   deleteStudent(id: number): void {
     this.studentService.deleteStudent(id).subscribe({
       next: () => {
-        this.students = this.students.filter(s => s.id !== id);
-        this.filteredStudents = this.filteredStudents.filter(s => s.id !== id);
+        this.students = this.students.filter(s => (s.id || s.Id) !== id);
+        this.filteredStudents = this.filteredStudents.filter(s => (s.id || s.Id) !== id);
         this.displayNotification('Student deleted successfully!', 'success');
         this.cdr.detectChanges(); 
       },

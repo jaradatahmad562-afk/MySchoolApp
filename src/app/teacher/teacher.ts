@@ -15,7 +15,7 @@ export class TeacherService {
   }
 
   addTeacher(teacher: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, { ...teacher, subjects: [] });
+    return this.http.post<any>(this.apiUrl, teacher);
   }
 
   updateTeacher(id: number, teacher: any): Observable<any> {
@@ -36,7 +36,7 @@ export class TeacherService {
 })
 export class TeacherComponent implements OnInit {
   teachers: any[] = [];
-  currentTeacher: any = { id: 0, name: '', specialization: '', isActive: true };
+  currentTeacher: any = { id: 0, name: '', specialization: '', email: '', password: '', isActive: true };
   isEditMode: boolean = false;
 
   constructor(private teacherService: TeacherService, private cdr: ChangeDetectorRef) { }
@@ -57,26 +57,29 @@ export class TeacherComponent implements OnInit {
   }
 
   toggleStatus(teacher: any): void {
-  const originalStatus = teacher.isActive;
-  
-  const newStatus = !teacher.isActive;
-  teacher.isActive = newStatus;
+    const originalStatus = teacher.isActive;
+    const newStatus = !teacher.isActive;
+    teacher.isActive = newStatus;
 
-  this.teacherService.updateTeacher(teacher.id, teacher).subscribe({
-    next: () => {
-      console.log(`Status changed to ${newStatus ? 'Active' : 'Inactive'}`);
-      this.cdr.detectChanges();
-    },
-    error: (err) => {
-      console.error('Update status failed:', err);
-      teacher.isActive = originalStatus;
-      this.cdr.detectChanges();
-      alert('Failed to update status on server');
-    }
-  });
-}
+    this.teacherService.updateTeacher(teacher.id, teacher).subscribe({
+      next: () => {
+        console.log(`Status changed to ${newStatus ? 'Active' : 'Inactive'}`);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Update status failed:', err);
+        teacher.isActive = originalStatus;
+        this.cdr.detectChanges();
+        alert('Failed to update status on server');
+      }
+    });
+  }
 
   saveTeacher() {
+    if (!this.currentTeacher.name?.trim() || !this.currentTeacher.specialization?.trim()) {
+      return;
+    }
+
     if (this.isEditMode) {
       this.teacherService.updateTeacher(this.currentTeacher.id, this.currentTeacher).subscribe({
         next: () => {
@@ -88,8 +91,9 @@ export class TeacherComponent implements OnInit {
     } else {
       const teacherToAdd = { 
         name: this.currentTeacher.name, 
-        specialization: this.currentTeacher.specialization,
-        isActive: true 
+        subject: this.currentTeacher.specialization, 
+        email: this.currentTeacher.email,        
+        password: this.currentTeacher.password       
       };
       
       this.teacherService.addTeacher(teacherToAdd).subscribe({
@@ -108,24 +112,25 @@ export class TeacherComponent implements OnInit {
   }
 
   deleteTeacher(id: number) {
-  this.teacherService.deleteTeacher(id).subscribe({
-    next: () => {
-      this.loadTeachers();
-      console.log('Teacher deleted successfully');
-    },
-    error: (err) => console.error('Delete operation failed:', err)
-  });
-}
+    this.teacherService.deleteTeacher(id).subscribe({
+      next: () => {
+        this.loadTeachers();
+        console.log('Teacher deleted successfully');
+      },
+      error: (err) => console.error('Delete operation failed:', err)
+    });
+  }
 
   resetForm() {
-    this.currentTeacher = { id: 0, name: '', specialization: '', isActive: true };
+    this.currentTeacher = { id: 0, name: '', specialization: '', email: '', password: '', isActive: true };
     this.isEditMode = false;
   }
 
   getActiveCount(): number {
     return this.teachers.filter(t => t.isActive).length;
   }
+
   deleteItem(id: any) {
-  this.teachers = this.teachers.filter(teacher => teacher.id !== id);
-}
+    this.teachers = this.teachers.filter(teacher => teacher.id !== id);
+  }
 }

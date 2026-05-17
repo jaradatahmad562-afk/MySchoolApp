@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <div class="card border-0 shadow-sm p-4 mb-4 rounded-4 glass-card bg-white">
+  <div class="card border-0 shadow-sm p-4 mb-4 rounded-4 glass-card bg-white" *ngIf="isAdmin()">
     <h5 class="mb-3 text-secondary fw-bold">Add New Student</h5>
     <div class="row g-3 align-items-end">
       <div class="col-md-4">
@@ -42,7 +42,7 @@
         <label class="form-label small fw-bold text-muted">Classroom</label>
         <select #newClass class="form-select border-0 bg-light">
           <option value="" disabled selected>Select Classroom</option>
-          <option *ngFor="let cls of classrooms" [value]="cls.id">{{ cls.name }}</option>
+          <option *ngFor="let cls of classrooms" [value]="cls?.id || cls?.Id">{{ cls?.name || cls?.Name }}</option>
         </select>
       </div>
       <div class="col-md-2">
@@ -74,31 +74,33 @@
             <th>STUDENT NAME</th>
             <th>BIRTH DATE</th>
             <th class="text-center">STATUS</th>
-            <th class="text-center px-4">ACTIONS</th>
+            <th class="text-center px-4" *ngIf="isAdmin()">ACTIONS</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let student of filteredStudents">
-            <td class="ps-4 text-muted small">#{{ student.id }}</td> 
-            <td class="entity-name">{{ student.name }}</td>
-            <td class="text-secondary">{{ student.birthDate | date:'mediumDate' }}</td> 
+            <td class="ps-4 text-muted small">#{{ student?.id || student?.Id }}</td> 
+            <td class="entity-name">{{ student?.name || student?.Name }}</td>
+            <td class="text-secondary">{{ (student?.birthDate || student?.BirthDate) | date:'mediumDate' }}</td> 
+            
             <td class="text-center">
               <button (click)="toggleStatus(student)" 
-                    class="btn btn-sm border-0 fw-bold px-3 py-2" 
-                    [ngClass]="(student.status?.toLowerCase() === 'active') ? 'status-active' : 'status-inactive'"
-                    style="font-size: 0.7rem;">
-                <i class="bi me-1" [ngClass]="(student.status?.toLowerCase() === 'active') ? 'bi-check-circle-fill' : 'bi-dash-circle-fill'"></i>
-                {{ student.status | uppercase }}
+                      class="btn btn-sm border-0 fw-bold px-3 py-2" 
+                      [ngClass]="((student?.status || student?.Status)?.toString()?.toLowerCase() === 'inactive') ? 'status-inactive' : 'status-active'"
+                      style="font-size: 0.7rem;">
+                <i class="bi me-1" [ngClass]="((student?.status || student?.Status)?.toString()?.toLowerCase() === 'inactive') ? 'bi-dash-circle-fill' : 'bi-check-circle-fill'"></i>
+                {{ (student?.status || student?.Status || 'Active') | uppercase }}
               </button>
             </td>
-            <td class="text-center px-4">
-              <button class="btn btn-link text-danger p-0" (click)="deleteStudent(student.id)">
+
+            <td class="text-center px-4" *ngIf="isAdmin()">
+              <button class="btn btn-link text-danger p-0" (click)="deleteStudent(student?.id || student?.Id)">
                 <i class="bi bi-trash3 fs-5"></i>
               </button>
             </td>
           </tr>
           <tr *ngIf="filteredStudents.length === 0">
-            <td colspan="5" class="text-center py-5 text-muted">No students found.</td>
+            <td [attr.colspan]="isAdmin() ? 5 : 4" class="text-center py-5 text-muted">No students found.</td>
           </tr>
         </tbody>
       </table>

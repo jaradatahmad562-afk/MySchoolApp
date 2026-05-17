@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; 
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms'; 
 
 @Component({
   selector: 'app-subject',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './subject.html',
   styleUrls: ['./subject.css']
 })
@@ -15,9 +15,7 @@ export class SubjectComponent implements OnInit {
   filteredSubjects: any[] = [];
   searchTerm: string = ''; 
 
-  // شلنا الـ teacherId من هون عشان يصير الفورم بس للعنوان والساعات
   newSubject = { title: '', credits: 0 };
-  
   private apiUrl = 'https://localhost:7264/api/Subject'; 
 
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
@@ -26,8 +24,22 @@ export class SubjectComponent implements OnInit {
     this.getAllSubjects();
   }
 
+  private getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    };
+  }
+
+  isAdmin(): boolean {
+    const role = localStorage.getItem('role');
+    return role === 'Admin';
+  }
+
   getAllSubjects() {
-    this.http.get<any[]>(this.apiUrl).subscribe({
+    this.http.get<any[]>(this.apiUrl, this.getAuthHeaders()).subscribe({
       next: (data) => {
         this.subjects = data || [];
         this.filteredSubjects = [...this.subjects]; 
@@ -50,22 +62,20 @@ export class SubjectComponent implements OnInit {
   }
 
   addSubject() {
-    // هسا بنبعث بس الـ Title والـ Credits
-    // الـ API بالباك إند رح يحط الـ TeacherId من عنده NULL تلقائياً
     const subjectToSave = {
       title: this.newSubject.title,
       credits: Number(this.newSubject.credits)
     };
 
     if (subjectToSave.title && subjectToSave.credits > 0) {
-      this.http.post(this.apiUrl, subjectToSave).subscribe({
+      this.http.post(this.apiUrl, subjectToSave, this.getAuthHeaders()).subscribe({
         next: () => {
           this.getAllSubjects(); 
-          this.newSubject = { title: '', credits: 0 }; // تصفير الفورم
+          this.newSubject = { title: '', credits: 0 }; 
           this.cdr.detectChanges();
         },
         error: (err) => {
-          console.error("الإضافة فشلت! تأكد إنك عدلت الـ Model في الباك إند ليكون الـ TeacherId اختياري (?)", err);
+          console.error("Add failed!", err);
         }
       });
     }
@@ -76,7 +86,7 @@ export class SubjectComponent implements OnInit {
     this.subjects = this.subjects.filter(s => s.id !== id);
     this.filteredSubjects = [...this.subjects];
 
-    this.http.delete(`${this.apiUrl}/${id}`).subscribe({
+    this.http.delete(`${this.apiUrl}/${id}`, this.getAuthHeaders()).subscribe({
       next: () => {
         console.log(`Subject with ID ${id} deleted`);
         this.cdr.detectChanges();

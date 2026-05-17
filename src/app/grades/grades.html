@@ -1,0 +1,67 @@
+<div class="container-fluid p-4 min-vh-100" style="background-color: #f3f4f6;">
+  
+  <div *ngIf="showNotification" class="alert alert-success position-fixed top-0 end-0 m-4 shadow-lg rounded-3 border-0 d-flex align-items-center gap-2" style="z-index: 1050; animation: slideIn 0.3s ease-out;">
+    <i class="bi bi-check-circle-fill fs-5"></i>
+    <span class="fw-bold">{{ notificationMessage }}</span>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold m-0" style="color: #1e3a8a;">Student Grades Entry</h2>
+      <p class="text-muted small m-0">Insert, update and manage student scores for all exams</p>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0 text-start">
+        <thead class="bg-light">
+          <tr class="text-muted small fw-bold">
+            <th class="ps-4 py-3">ID</th>
+            <th>STUDENT NAME</th>
+            <th class="text-center" style="width: 150px;">FIRST (30)</th>
+            <th class="text-center" style="width: 150px;">SECOND (30)</th>
+            <th class="text-center" style="width: 150px;">FINAL (40)</th>
+            <th class="text-center fw-bolder text-primary" style="width: 150px; background-color: #f8fafc;">TOTAL (100)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of studentsWithGrades">
+            <td class="ps-4 text-muted small">#{{ student?.id }}</td>
+            
+            <td class="fw-bold" style="color: #1e3a8a;">
+              <i class="bi bi-person-badge me-2 text-secondary"></i>{{ student?.name }}
+            </td>
+
+            <td class="text-center">
+              <input type="number" class="form-control border-0 bg-light text-center fw-bold rounded-3 shadow-sm mx-auto" 
+                     style="width: 75px; padding: 6px;" [(ngModel)]="student.firstExam" min="0" max="30">
+            </td>
+
+            <td class="text-center">
+              <input type="number" class="form-control border-0 bg-light text-center fw-bold rounded-3 shadow-sm mx-auto" 
+                     style="width: 75px; padding: 6px;" [(ngModel)]="student.secondExam" min="0" max="30">
+            </td>
+
+            <td class="text-center">
+              <input type="number" class="form-control border-0 bg-light text-center fw-bold rounded-3 shadow-sm mx-auto" 
+                     style="width: 75px; padding: 6px;" [(ngModel)]="student.finalExam" min="0" max="40">
+            </td>
+
+            <td class="text-center fw-bold text-primary fs-6" style="background-color: #f8fafc;">
+              <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-3">
+                {{ (student.firstExam || 0) + (student.secondExam || 0) + (student.finalExam || 0) }} / 100
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-footer bg-white text-end p-3 border-0">
+      <button class="btn btn-success px-5 fw-bold rounded-3 shadow-sm py-2" (click)="saveGrades()">
+        <i class="bi bi-shield-check me-1"></i> Save & Lock All Grades
+      </button>
+    </div>
+  </div>
+</div>

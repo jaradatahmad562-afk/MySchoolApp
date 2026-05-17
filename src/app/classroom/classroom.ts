@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormsModule } from '@angular/forms'; 
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http'; 
 
 @Component({
   selector: 'app-classroom',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, FormsModule], 
+  imports: [CommonModule, ReactiveFormsModule, FormsModule], 
   templateUrl: './classroom.html',
   styleUrl: './classroom.css'
 })
@@ -52,24 +52,18 @@ export class ClassroomComponent implements OnInit {
     });
   }
 
-  // التعديل هنا لحل مشكلة "تغيير سطر بدلاً من سطر آخر"
   toggleStatus(room: any) {
-    // 1. تحديد الـ ID والحالة الجديدة قبل أي شيء
     const roomId = room.id;
     const isAvailable = room.status?.toLowerCase() === 'available';
     const newStatus = isAvailable ? 'Occupied' : 'Available';
     
-    // 2. تجهيز البيانات للإرسال
     const updatedRoom = { ...room, status: newStatus };
 
     this.http.put(`${this.apiUrl}/${roomId}`, updatedRoom).subscribe({
       next: () => {
-        // 3. التحديث الجراحي: نبحث عن الـ ID داخل المصفوفة الأصلية (this.classrooms)
-        // هذا يضمن أنه حتى مع وجود فلتر بحث، التعديل سيصيب العنصر الصحيح حصراً
         this.classrooms = this.classrooms.map(r => 
           r.id === roomId ? { ...r, status: newStatus } : r
         );
-        
         this.cdr.detectChanges(); 
       },
       error: (err: any) => console.error('Update status failed:', err)

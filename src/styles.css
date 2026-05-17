@@ -1,15 +1,54 @@
 :root {
   --primary-navy: #1e3a8a; 
   --primary-gradient: linear-gradient(45deg, #1e3a8a 0%, #1e40af 100%);
-
   --success-green: #10b981;
   --success-gradient: linear-gradient(45deg, #10b981 0%, #059669 100%);
-
   --bg-light: #f3f4f6;
-  
   --danger-red: #ef4444;
 }
 
-body {
-  background-color: var(--bg-light) !important;
+/* التصفير الأساسي لمتصفح الويب لضمان كبس الحواف */
+html, body, app-root {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box;
+  background-color: var(--bg-light);
+  overflow: hidden !important; /* قفل أمان خارجي للمتصفح منعاً للسكرول المزدوج */
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* 🟢 كلاس الصفحات العادية (Dashboard, Classrooms...) */
+/* بياخذ طول مرن محسوب وبسمح بالسكرول العمودي الداخلي للجداول براحتها */
+.page-content {
+  width: 100% !important;
+  height: calc(100vh - 56px) !important; /* بيطرح مساحة الـ Navbar فقط */
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-y: auto !important; 
+  overflow-x: hidden !important;
+}
+
+/* 🔵 كلاس صفحة الـ Login المستقل تماماً والمنفصل */
+/* بفرش 100% من الشاشة بالطول والعرض وبيمحي الفراغ الأبيض ومستحيل يعمل سكرول */
+.login-page-wrapper {
+  width: 100% !important;
+  height: 100vh !important; /* امتداد كامل مطلق ومستحيل ينقص بكسل */
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* تنسيق هيدر الـ Navbar */
+.main-navbar {
+  width: 100%;
+  height: 56px;
+  position: relative;
+  z-index: 1000;
+  margin: 0;
+  padding: 0;
 }

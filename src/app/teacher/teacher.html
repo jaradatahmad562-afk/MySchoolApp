@@ -28,19 +28,38 @@
 
   <div class="card border-0 shadow-sm p-4 mb-5 rounded-4 glass-card">
     <div class="row g-3 align-items-end">
-      <div class="col-md-5">
+      
+      <div class="col-md-3">
         <label class="form-label fw-bold text-muted small">Teacher Name</label>
-        <input type="text" [(ngModel)]="currentTeacher.name" class="form-control border-0 bg-light">
+        <input type="text" [(ngModel)]="currentTeacher.name" class="form-control border-0 bg-light py-2 rounded-3">
       </div>
-      <div class="col-md-5">
+      
+      <div class="col-md-3">
         <label class="form-label fw-bold text-muted small">Specialization</label>
-        <input type="text" [(ngModel)]="currentTeacher.specialization" class="form-control border-0 bg-light">
+        <input type="text" [(ngModel)]="currentTeacher.specialization" class="form-control border-0 bg-light py-2 rounded-3">
       </div>
-      <div class="col-md-2">
-        <button class="btn btn-save-custom w-100 py-2" (click)="saveTeacher()">
-          <i class="bi bi-plus-circle me-1"></i> Add
+      
+      <div class="col-md-3" *ngIf="!isEditMode">
+        <label class="form-label fw-bold text-muted small">Email Address</label>
+        <input type="email" [(ngModel)]="currentTeacher.email" class="form-control border-0 bg-light py-2 rounded-3" placeholder="name@school.com">
+      </div>
+      
+      <div class="col-md-3" *ngIf="!isEditMode">
+        <label class="form-label fw-bold text-muted small">Account Password</label>
+        <input type="password" [(ngModel)]="currentTeacher.password" class="form-control border-0 bg-light py-2 rounded-3" placeholder="••••••••">
+      </div>
+      
+      <div class="col-12 mt-3 d-flex justify-content-end">
+        <button 
+          class="btn btn-save-custom px-5 py-2 fw-bold shadow-sm rounded-3" 
+          (click)="saveTeacher()"
+          [disabled]="!currentTeacher.name?.trim() || !currentTeacher.specialization?.trim()"
+        >
+          <i class="bi" [ngClass]="isEditMode ? 'bi-check-circle-fill' : 'bi-plus-circle-fill'"></i> 
+          {{ isEditMode ? ' Update Teacher' : ' Add Teacher' }}
         </button>
       </div>
+      
     </div>
   </div>
 
@@ -68,7 +87,7 @@
             </button>
           </td>
           <td class="text-center">
-            <button class="btn btn-link text-danger p-0" (click)="deleteTeacher(teacher.id)">
+            <button class="btn btn-link text-danger p-0 me-2" (click)="deleteTeacher(teacher.id)">
               <i class="bi bi-trash3"></i>
             </button>
           </td>

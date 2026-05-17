@@ -1,41 +1,50 @@
 <div class="dashboard-hero">
   <div class="main-overlay">
     <div class="container">
+      
       <header class="hero-header text-center">
         <h1>School Management System</h1>
         <p>A modern approach to managing your educational environment with ease and precision.</p>
       </header>
 
       <div class="quick-access-grid">
-        <div class="action-card" routerLink="/students">
+        
+        <div class="action-card" routerLink="/students" style="cursor: pointer;">
           <div class="icon-box">👥</div>
           <h3>Student List</h3>
           <p>View and manage all student profiles.</p>
         </div>
 
-        <div class="action-card" routerLink="/classrooms">
+        <div class="action-card" routerLink="/classrooms" *ngIf="isAdmin()" style="cursor: pointer;">
           <div class="icon-box">🏫</div>
           <h3>Classrooms</h3>
           <p>Organize academic rooms and facilities.</p>
         </div>
 
-        <div class="action-card" routerLink="/subject">
+        <div class="action-card" routerLink="/grades" style="cursor: pointer;">
+          <div class="icon-box">⭐</div>
+          <h3>Grades Entry</h3>
+          <p>Insert and lock student examination scores.</p>
+        </div>
+
+        <div class="action-card" routerLink="/subjects" style="cursor: pointer;">
           <div class="icon-box">📚</div>
           <h3>Subjects</h3>
           <p>Manage curriculum and study materials.</p>
         </div>
 
-        <div class="action-card" routerLink="/schedule">
-         <div class="icon-box">📅</div>
-        <h3>Schedule</h3>
-       <p>Track class timings and school events.</p>
-       </div>
+        <div class="action-card" routerLink="/schedule" style="cursor: pointer;">
+          <div class="icon-box">📅</div>
+          <h3>Schedule</h3>
+          <p>Track class timings and school events.</p>
+        </div>
 
-        <div class="action-card" routerLink="/teachers">
+        <div class="action-card" routerLink="/teachers" *ngIf="isAdmin()" style="cursor: pointer;">
           <div class="icon-box">👨‍🏫</div>
           <h3>Teachers</h3>
           <p>Manage faculty details and schedules.</p>
         </div>
+
       </div>
     </div>
   </div>
