@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; 
 import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -25,7 +25,7 @@ export class ScheduleComponent implements OnInit {
     classroomId: 0
   };
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { } 
+  constructor(private http: HttpClient) { } 
 
   ngOnInit(): void {
     this.fetchData(); 
@@ -48,8 +48,10 @@ export class ScheduleComponent implements OnInit {
   fetchData(): void {
     this.http.get<any[]>(`${this.baseUrl}/Schedule`, this.getAuthHeaders()).subscribe({
       next: (data) => {
-        this.schedules = data; 
-        this.cdr.detectChanges(); 
+       
+        setTimeout(() => {
+          this.schedules = data; 
+        }, 0);
       },
       error: (err) => {
         console.error("Error fetching data", err);
@@ -93,8 +95,10 @@ export class ScheduleComponent implements OnInit {
     if (confirm("Are you sure you want to delete this slot?")) {
       this.http.delete(`${this.baseUrl}/Schedule/${id}`, this.getAuthHeaders()).subscribe({
         next: () => {
-          this.schedules = this.schedules.filter(s => s.id != id); 
-          this.cdr.detectChanges(); 
+          
+          setTimeout(() => {
+            this.schedules = this.schedules.filter(s => s.id != id); 
+          }, 0);
           console.log("Deleted successfully");
         },
         error: (err) => {

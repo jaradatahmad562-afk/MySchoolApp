@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // 👈 ضفنا HttpHeaders عشان التوكن
+import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 import { StudentService } from '../student'; 
 
 @Component({
@@ -16,6 +16,9 @@ export class StudentsComponent implements OnInit {
   filteredStudents: any[] = [];
   classrooms: any[] = [];
   
+  newStudentEmail: string = '';
+  newStudentPassword: string = '';
+
   notificationMessage: string = '';
   showNotification: boolean = false;
   notificationType: 'success' | 'error' | 'warning' = 'success';
@@ -28,7 +31,6 @@ export class StudentsComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-  // 🛡️ ميثود جلب التوكن وحقنه بالـ Headers لحماية طلب الـ Classroom مباشرة
   private getAuthHeaders() {
     const token = localStorage.getItem('token');
     return {
@@ -38,7 +40,6 @@ export class StudentsComponent implements OnInit {
     };
   }
 
-  // 👑 دالة فحص الصلاحية عشان الـ HTML يخفي ويظهر الأزرار حسب الأدمن والمعلم
   isAdmin(): boolean {
     const role = localStorage.getItem('role');
     return role === 'Admin';
@@ -49,7 +50,6 @@ export class StudentsComponent implements OnInit {
   }
 
   get activeStudentsCount(): number {
-    // 🚀 تأمين الحسبة في حال كانت الـ status راجعة كابيتال أو سمول من السيرفر
     return this.students.filter(s => {
       const currentStatus = s.status || s.Status || '';
       return currentStatus.toString().toLowerCase() === 'active';
@@ -62,6 +62,7 @@ export class StudentsComponent implements OnInit {
   }
 
   displayNotification(message: string, type: 'success' | 'error' | 'warning' = 'success'): void {
+    document.title = message; 
     this.notificationMessage = message;
     this.notificationType = type;
     this.showNotification = true;
@@ -87,10 +88,8 @@ export class StudentsComponent implements OnInit {
   }
 
   loadClassrooms(): void {
-    // 🚀 حقنا التوكن هان بطلب الـ Classroom عشان السيرفر يرضى يرجع الصفوف وما يطلع الـ Dropdown فاضي
     this.http.get<any[]>(this.classroomApiUrl, this.getAuthHeaders()).subscribe({
       next: (data) => {
-        console.log('Classrooms loaded from server:', data); // طبعة بالـ Console للتأكد من الأسماء
         this.classrooms = data || [];
         this.cdr.detectChanges();
       },
@@ -113,11 +112,9 @@ export class StudentsComponent implements OnInit {
   toggleStatus(student: any): void {
     if (!student) return;
 
-    // 🚀 تأمين وحماية الـ Status تماماً من مشاكل الـ undefined والـ Case Sensitivity
     const currentStatus = student.status || student.Status || 'Active';
     const newStatus = currentStatus.toString().toLowerCase() === 'active' ? 'Inactive' : 'Active';
 
-    // بنحدث القيمة بالصيغتين عشان نضمن الفرونت والباك إند يقرأوها صح
     student.status = newStatus;
     student.Status = newStatus;
 
@@ -136,9 +133,11 @@ export class StudentsComponent implements OnInit {
     });
   }
 
-  addStudent(name: string, birthDate: string, classroomId: string): void {
-    if (!name || !birthDate || !classroomId) {
-      this.displayNotification('Please fill all required fields', 'warning');
+  addStudent(name: string, birthDate: string, classroomId: string, 
+             nameInput: HTMLInputElement, dateInput: HTMLInputElement, classSelect: HTMLSelectElement): void {
+             
+    if (!name || !birthDate || !classroomId || !this.newStudentEmail || !this.newStudentPassword) {
+      this.displayNotification('Please fill all required fields, including email and password', 'warning');
       return;
     }
 
@@ -147,13 +146,23 @@ export class StudentsComponent implements OnInit {
       Name: name,
       BirthDate: birthDate,
       Status: 'Active',
-      ClassroomId: parseInt(classroomId)
+      ClassroomId: parseInt(classroomId),
+      Email: this.newStudentEmail,       
+      Password: this.newStudentPassword  
     };
 
     this.studentService.addStudent(newStudent).subscribe({
       next: () => {
         this.loadStudents(); 
-        this.displayNotification('Student added successfully!', 'success');
+        this.displayNotification('Student and user account created successfully!', 'success');
+        
+        nameInput.value = '';
+        dateInput.value = '';
+        classSelect.value = '';
+        this.newStudentEmail = '';
+        this.newStudentPassword = '';
+        
+        this.cdr.detectChanges(); 
       },
       error: (err) => {
         console.error('Add failed:', err);

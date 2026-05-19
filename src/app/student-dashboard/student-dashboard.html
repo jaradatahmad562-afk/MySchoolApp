@@ -1,0 +1,115 @@
+<div class="container mt-5" style="direction: ltr; text-align: left; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+  
+  <div *ngIf="currentTab === 'profile'">
+    <div class="row mb-4">
+      <div class="col shadow-sm p-4 bg-white rounded border-start border-primary border-4">
+        <h2 class="text-primary fw-bold">🎓 My Profile Dashboard</h2>
+        <p class="text-muted">Welcome to your personal account — Real-time academic information.</p>
+      </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+      <div class="card-header bg-dark text-white p-3">
+        <h4 class="mb-0 fs-5"><i class="bi bi-person-badge-fill me-2 text-warning"></i> Personal Information</h4>
+      </div>
+      <div class="card-body p-4 bg-white">
+        <div class="row align-items-center">
+          <div class="col-md-2 text-center mb-3 mb-md-0">
+            <div class="d-inline-block bg-light p-3 rounded-circle shadow-sm text-primary">
+              <i class="bi bi-person-fill" style="font-size: 3.5rem;"></i>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div class="row g-3">
+              <div class="col-sm-6 col-md-4">
+                <label class="text-muted small fw-bold d-block text-uppercase mb-1" style="font-size: 0.75rem;">Full Name</label>
+                <span class="fs-5 fw-bold text-dark">{{ studentProfile?.name || 'Loading...' }}</span>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <label class="text-muted small fw-bold d-block text-uppercase mb-1" style="font-size: 0.75rem;">Birth Date</label>
+                <span class="fs-6 text-secondary fw-semibold">{{ (studentProfile?.birthDate) | date:'mediumDate' }}</span>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <label class="text-muted small fw-bold d-block text-uppercase mb-1" style="font-size: 0.75rem;">Classroom</label>
+                <span class="badge bg-primary px-3 py-2 fs-6 rounded-pill shadow-sm">{{ studentProfile?.classroomName || 'Not Assigned' }}</span>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <label class="text-muted small fw-bold d-block text-uppercase mb-1" style="font-size: 0.75rem;">Status</label>
+                <span class="badge px-3 py-2 rounded-pill shadow-sm" [ngClass]="studentProfile?.status?.toLowerCase() === 'active' ? 'bg-success' : 'bg-danger'">
+                  {{ studentProfile?.status || 'Active' | uppercase }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-3 overflow-hidden" *ngIf="currentTab === 'schedule'">
+    <div class="card-header bg-primary text-white p-3">
+      <h4 class="mb-0 fs-5"><i class="bi bi-calendar3 me-2"></i> Weekly Academic Schedule</h4>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-hover table-striped mb-0 align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th class="ps-3">Day</th>
+            <th>Subject</th>
+            <th>Teacher Name</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of schedule">
+            <td class="fw-bold text-secondary ps-3">{{ item.dayOfWeek }}</td>
+            <td><span class="badge bg-info text-dark p-2">{{ item.subjectName }}</span></td>
+            <td>{{ item.teacherName }}</td>
+            <td class="text-success fw-semibold">{{ item.startTime }}</td>
+            <td class="text-danger fw-semibold">{{ item.endTime }}</td>
+          </tr>
+          <tr *ngIf="schedule.length === 0">
+            <td colspan="5" class="text-center text-muted p-4">No classes registered in your schedule yet.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 rounded-3 overflow-hidden" *ngIf="currentTab === 'grades'">
+    <div class="card-header bg-success text-white p-3">
+      <h4 class="mb-0 fs-5"><i class="bi bi-file-earmark-bar-graph me-2"></i> Academic Report Card (Grades)</h4>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-hover table-bordered mb-0 text-center align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th class="text-start ps-3">Subject Name</th>
+            <th>First Exam (20)</th>
+            <th>Second Exam (20)</th>
+            <th>Final Exam (60)</th>
+            <th>Total Score (100)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let g of grades">
+            <td class="fw-bold text-start text-success ps-3">{{ g.subjectName }}</td>
+            <td class="fw-semibold text-secondary">{{ g.firstExam }}</td>
+            <td class="fw-semibold text-secondary">{{ g.secondExam }}</td>
+            <td class="fw-semibold text-secondary">{{ g.finalExam }}</td>
+            <td>
+              <span class="badge p-2 px-3 rounded-pill fs-6 shadow-sm" [ngClass]="g.total >= 50 ? 'bg-success' : 'bg-danger'">
+                {{ g.total }} / 100
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="grades.length === 0">
+            <td colspan="5" class="text-center text-muted p-4">No grades have been published by teachers yet.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

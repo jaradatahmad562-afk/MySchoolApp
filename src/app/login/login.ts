@@ -24,7 +24,7 @@ export class LoginComponent {
     this.http.post<any>(loginUrl, this.loginData).subscribe({
       next: (response) => {
         if (response && response.token) {
-          // 1. Store the token
+          // 1. تخزين التوكن الجديد فوراً
           localStorage.setItem('token', response.token);
           
           let userRole = 'Teacher'; 
@@ -32,8 +32,10 @@ export class LoginComponent {
           try {
             const decodedToken: any = jwtDecode(response.token);
             
+            // 2. سحب الـ Role الحقيقي من الـ Claim التابع للباك إند
             userRole = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || 'Teacher';
             
+            // 3. تخزين الـ Role الجديد بالـ localStorage لتحديث الـ Navbar بالثانية
             localStorage.setItem('role', userRole);
             
             console.log('Login successful! Current role:', userRole);
@@ -42,11 +44,16 @@ export class LoginComponent {
             localStorage.setItem('role', 'Teacher'); 
           }
 
+          // 🚀 4. التوجيه الذكي والصحيح حسب الـ Role بدون أي تضارب
           if (userRole === 'Admin') {
             this.router.navigate(['/dashboard']); 
           } else if (userRole === 'Teacher') {
             this.router.navigate(['/dashboard']);
+          } else if (userRole === 'Student') {
+            // ✨ التوجيه السحري لصفحة الطالب الإنجليزية الفخمة اللي عملناها
+            this.router.navigate(['/student-dashboard']); 
           } else {
+            // احتياطاً لو في رول بختلف يرجعه ع الـ dashboard العامة
             this.router.navigate(['/dashboard']); 
           }
 

@@ -28,13 +28,14 @@
   </div>
 
   <div class="card border-0 shadow-sm p-4 mb-4 rounded-4 glass-card bg-white" *ngIf="isAdmin()">
-    <h5 class="mb-3 text-secondary fw-bold">Add New Student</h5>
-    <div class="row g-3 align-items-end">
-      <div class="col-md-4">
+    <h5 class="mb-3 text-secondary fw-bold">Add New Student & User Account</h5>
+    
+    <div class="row g-3 mb-3">
+      <div class="col-md-5">
         <label class="form-label small fw-bold text-muted">Student Name</label>
         <input #newName type="text" class="form-control border-0 bg-light" placeholder="e.g. Ahmad Al-Zoubi">
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <label class="form-label small fw-bold text-muted">Birth Date</label>
         <input #newDate type="date" class="form-control border-0 bg-light">
       </div>
@@ -45,10 +46,21 @@
           <option *ngFor="let cls of classrooms" [value]="cls?.id || cls?.Id">{{ cls?.name || cls?.Name }}</option>
         </select>
       </div>
-      <div class="col-md-2">
-        <button (click)="addStudent(newName.value, newDate.value, newClass.value); newName.value=''; newDate.value=''; newClass.value=''" 
+    </div>
+
+    <div class="row g-3 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label small fw-bold text-muted">Login Email</label>
+        <input type="email" [(ngModel)]="newStudentEmail" class="form-control border-0 bg-light" placeholder="e.g. ahmad@school.com">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label small fw-bold text-muted">Account Password</label>
+        <input type="password" [(ngModel)]="newStudentPassword" class="form-control border-0 bg-light" placeholder="Enter secure password">
+      </div>
+      <div class="col-md-3">
+        <button (click)="addStudent(newName.value, newDate.value, newClass.value, newName, newDate, newClass)" 
                 class="btn btn-save-custom w-100 py-2">
-          <i class="bi bi-plus-circle me-1"></i> Add
+          <i class="bi bi-plus-circle me-1"></i> Add Student
         </button>
       </div>
     </div>

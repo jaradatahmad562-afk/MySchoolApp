@@ -11,6 +11,7 @@ import { filter } from 'rxjs/operators';
   styleUrl: './app.css'
 })
 export class App implements OnInit {
+  localStorage = localStorage;
 
   constructor(public router: Router) {}
 
@@ -25,6 +26,11 @@ export class App implements OnInit {
   isAdmin(): boolean {
     const role = localStorage.getItem('role');
     return role === 'Admin';
+  }
+
+  isStudent(): boolean {
+    const role = localStorage.getItem('role');
+    return role === 'Student';
   }
 
   isLoggedIn(): boolean {
