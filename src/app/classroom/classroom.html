@@ -66,6 +66,30 @@
     </div>
   </div>
 
+  <div *ngIf="selectedClassroomId" class="card border-0 shadow-sm p-4 mb-4 rounded-4 bg-white border-start border-primary border-4 animate__animated animate__fadeIn">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="text-primary fw-bold mb-0">
+        <i class="bi bi-person-plus-fill me-2"></i>Quick Add Student to: <span class="text-dark">{{ selectedClassroomName }}</span>
+      </h5>
+      <button type="button" class="btn-close" (click)="selectedClassroomId = null"></button>
+    </div>
+    <div class="row g-3 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label small fw-bold text-muted">Student Full Name</label>
+        <input type="text" [(ngModel)]="newStudent.name" class="form-control border-0 bg-light" placeholder="e.g. Ahmad Alawneh">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label small fw-bold text-muted">Birth Date</label>
+        <input type="date" [(ngModel)]="newStudent.birthDate" class="form-control border-0 bg-light">
+      </div>
+      <div class="col-md-3">
+        <button type="button" (click)="submitStudent()" class="btn btn-primary w-100 py-2 fw-bold rounded-3">
+          <i class="bi bi-person-plus me-1"></i> Assign Student
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
     <div class="table-responsive">
       <table class="table table-hover align-middle mb-0">
@@ -74,6 +98,7 @@
             <th class="ps-4 py-3">ID</th> 
             <th>ROOM NAME</th>
             <th>CAPACITY</th>
+            <th>CURRENT STUDENTS</th>
             <th class="text-center">STATUS</th>
             <th class="text-center px-4">ACTIONS</th>
           </tr>
@@ -83,6 +108,15 @@
             <td class="ps-4 text-muted small">#{{ room.id }}</td> 
             <td class="entity-name">{{ room.name }}</td>
             <td class="text-secondary">{{ room.capacity }} Students</td> 
+            
+            <td>
+              <span class="badge rounded-pill px-3 py-2" 
+                    [ngClass]="room.studentsCount > 0 ? 'bg-primary bg-opacity-10 text-primary' : 'bg-light text-muted'"
+                    style="font-size: 0.85rem; font-weight: 600;">
+                <i class="bi bi-people-fill me-1"></i> {{ room.studentsCount || 0 }} Enrolled
+              </span>
+            </td>
+
             <td class="text-center">
               <button 
                 (click)="toggleStatus(room)" 
@@ -94,13 +128,16 @@
               </button>
             </td>
             <td class="text-center px-4">
-              <button class="btn btn-link text-danger p-0" (click)="deleteRoom(room.id)">
+              <button class="btn btn-link text-success p-0 me-3" title="Add Student" (click)="openAddStudentForm(room.id, room.name)">
+                <i class="bi bi-person-plus fs-5"></i>
+              </button>
+              <button class="btn btn-link text-danger p-0" title="Delete Room" (click)="deleteRoom(room.id)">
                 <i class="bi bi-trash3 fs-5"></i>
               </button>
             </td>
           </tr>
           <tr *ngIf="filteredClassrooms.length === 0">
-            <td colspan="5" class="text-center py-5 text-muted">
+            <td colspan="6" class="text-center py-5 text-muted">
               No classrooms found matching your search.
             </td>
           </tr>
